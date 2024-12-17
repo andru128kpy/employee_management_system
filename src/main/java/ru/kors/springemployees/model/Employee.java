@@ -9,14 +9,14 @@ import java.time.Period;
 @Data
 @Entity
 @Table(name = "emloyees")
-public class Emloyee {
+public class Employee {
     @Id
     @GeneratedValue
     private Long id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String maneger;
+    private String manager;
     private String url;
     private String status;
     @Column(unique = true)

@@ -1,13 +1,16 @@
 package ru.kors.springemployees.service;
 
-import ru.kors.springemployees.model.Emloyee;
+import ru.kors.springemployees.model.Employee;
 
 import java.util.List;
 
 public interface EmployeeService {
-    List<Emloyee> findAllEmployee();
-    Emloyee saveEmployee(Emloyee employee);
-    Emloyee findByEmail(String email);
-    Emloyee updateEmployee(Emloyee employee);
+    List<Employee> findAllEmployee();
+    Employee saveEmployee(Employee employee);
+    Employee findByEmail(String email);
+    Employee updateEmployee(Employee employee);
     void deleteEmployee(String email);
+    List<Employee> findByName(String firstName);
+    List<Employee> findByStatus(String status);
+    List<Employee> findByManager(String manager);
 }

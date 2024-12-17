@@ -2,7 +2,7 @@ package ru.kors.springemployees.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.kors.springemployees.model.Emloyee;
+import ru.kors.springemployees.model.Employee;
 import ru.kors.springemployees.service.EmployeeService;
 
 import java.util.List;
@@ -15,25 +15,25 @@ public class EmployeeController {
     private final EmployeeService service;
 
     @GetMapping
-    public List<Emloyee> findAllStudent() {
+    public List<Employee> findAllStudent() {
         //todo
         return service.findAllEmployee();
     }
 
     @PostMapping("save_employee")
-    public String saveStudent(@RequestBody Emloyee employee) {
+    public String saveStudent(@RequestBody Employee employee) {
         service.saveEmployee(employee);
         return "employee successfully saved";
     }
 
     @GetMapping("/{email}")
-    public Emloyee findByEmail(@PathVariable String email) {
+    public Employee findByEmail(@PathVariable String email) {
         return service.findByEmail(email);
     }
     // /api/v1/students/oleg12@gmail.com
 
     @PutMapping("update_employee")
-    public Emloyee updateStudent(@RequestBody Emloyee employee) {
+    public Employee updateStudent(@RequestBody Employee employee) {
         return service.updateEmployee(employee);
     }
 
@@ -41,4 +41,20 @@ public class EmployeeController {
     public void deleteEmployee(@PathVariable String email) {
         service.deleteEmployee(email);
     }
+
+    @GetMapping("/findByName/{firstName}")
+    public List<Employee> findByName(@PathVariable String firstName) {
+        return service.findByName(firstName);
+    }
+
+    @GetMapping("/findByStatus/{status}")
+    public List<Employee> findByStatus(@PathVariable String status) {
+        return service.findByStatus(status);
+    }
+
+    @GetMapping("/findByManager/{manager}")
+    public List<Employee> findByManager(@PathVariable String manager) {
+        return service.findByManager(manager);
+    }
+
 }

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kors.springemployees.model.Emloyee;
+import ru.kors.springemployees.model.Employee;
 import ru.kors.springemployees.repository.EmployeeRepository;
 import ru.kors.springemployees.service.EmployeeService;
 
@@ -17,22 +17,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository repository;
 
     @Override
-    public List<Emloyee> findAllEmployee() {
+    public List<Employee> findAllEmployee() {
         return repository.findAll();
     }
 
     @Override
-    public Emloyee saveEmployee(Emloyee employee) {
+    public Employee saveEmployee(Employee employee) {
         return repository.save(employee);
     }
 
     @Override
-    public Emloyee findByEmail(String email) {
+    public Employee findByEmail(String email) {
         return repository.findEmployeeByEmail(email);
     }
 
     @Override
-    public Emloyee updateEmployee(Emloyee employee) {
+    public Employee updateEmployee(Employee employee) {
         return repository.save(employee);
     }
 
@@ -40,5 +40,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public void deleteEmployee(String email) {
         repository.deleteByEmail(email);
+    }
+
+    @Override
+    public List<Employee> findByName(String firstName) {
+        return repository.findByFirstName(firstName);
+    }
+
+    @Override
+    public List<Employee> findByStatus(String status) {
+        return repository.findByStatus(status);
+    }
+
+    @Override
+    public List<Employee> findByManager(String manager) {
+        return repository.findByManager(manager);
     }
 }
