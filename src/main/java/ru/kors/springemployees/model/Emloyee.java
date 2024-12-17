@@ -18,6 +18,7 @@ public class Emloyee {
     private LocalDate dateOfBirth;
     private String maneger;
     private String url;
+    private String status;
     @Column(unique = true)
     private String email;
     @Transient

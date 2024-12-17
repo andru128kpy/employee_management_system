@@ -17,28 +17,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository repository;
 
     @Override
-    public List<Emloyee> findAllStudent() {
+    public List<Emloyee> findAllEmployee() {
         return repository.findAll();
     }
 
     @Override
-    public Emloyee saveEmployee(Emloyee student) {
-        return repository.save(student);
+    public Emloyee saveEmployee(Emloyee employee) {
+        return repository.save(employee);
     }
 
     @Override
     public Emloyee findByEmail(String email) {
-        return repository.findStudentByEmail(email);
+        return repository.findEmployeeByEmail(email);
     }
 
     @Override
-    public Emloyee updateStudent(Emloyee student) {
-        return repository.save(student);
+    public Emloyee updateEmployee(Emloyee employee) {
+        return repository.save(employee);
     }
 
     @Override
     @Transactional
-    public void deleteStudent(String email) {
+    public void deleteEmployee(String email) {
         repository.deleteByEmail(email);
     }
 }

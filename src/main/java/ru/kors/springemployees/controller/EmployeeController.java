@@ -17,13 +17,13 @@ public class EmployeeController {
     @GetMapping
     public List<Emloyee> findAllStudent() {
         //todo
-        return service.findAllStudent();
+        return service.findAllEmployee();
     }
 
     @PostMapping("save_employee")
-    public String saveStudent(@RequestBody Emloyee student) {
-        service.saveEmployee(student);
-        return "Student successfully saved";
+    public String saveStudent(@RequestBody Emloyee employee) {
+        service.saveEmployee(employee);
+        return "employee successfully saved";
     }
 
     @GetMapping("/{email}")
@@ -33,12 +33,12 @@ public class EmployeeController {
     // /api/v1/students/oleg12@gmail.com
 
     @PutMapping("update_employee")
-    public Emloyee updateStudent(@RequestBody Emloyee student) {
-        return service.updateStudent(student);
+    public Emloyee updateStudent(@RequestBody Emloyee employee) {
+        return service.updateEmployee(employee);
     }
 
     @DeleteMapping("delete_employee/{email}")
-    public void deleteStudent(@PathVariable String email) {
-        service.deleteStudent(email);
+    public void deleteEmployee(@PathVariable String email) {
+        service.deleteEmployee(email);
     }
 }

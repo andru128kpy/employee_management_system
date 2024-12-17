@@ -6,5 +6,5 @@ import ru.kors.springemployees.model.Emloyee;
 
 public interface EmployeeRepository extends JpaRepository<Emloyee, Long> {
     void deleteByEmail(String email);
-    Emloyee findStudentByEmail(String email);
+    Emloyee findEmployeeByEmail(String email);
 }
