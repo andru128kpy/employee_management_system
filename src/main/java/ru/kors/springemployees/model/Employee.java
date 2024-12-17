@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Set;
 
 @Data
 @Entity
@@ -23,6 +24,14 @@ public class Employee {
     private String email;
     @Transient
     private int age;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_department",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id")
+    )
+    private Set<Department> departments;
 
     public int getAge() {
         return Period.between(dateOfBirth, LocalDate.now()).getYears();
