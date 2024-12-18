@@ -1,8 +1,8 @@
-package ru.kors.springemployees.controller;
+package com.example.springemployees.controller;
 
 import lombok.AllArgsConstructor;
-import ru.kors.springemployees.model.Department;
-import ru.kors.springemployees.service.DepartmentService;
+import com.example.springemployees.model.Department;
+import com.example.springemployees.service.DepartmentService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 

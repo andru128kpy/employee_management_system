@@ -1,8 +1,8 @@
-package ru.kors.springemployees.repository;
+package com.example.springemployees.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.kors.springemployees.model.Employee;
+import com.example.springemployees.model.Employee;
 
 import java.util.List;
 

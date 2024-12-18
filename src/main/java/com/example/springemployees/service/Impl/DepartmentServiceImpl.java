@@ -1,10 +1,10 @@
-package ru.kors.springemployees.service.Impl;
+package com.example.springemployees.service.Impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.kors.springemployees.model.Department;
-import ru.kors.springemployees.repository.DepartmentRepository;
-import ru.kors.springemployees.service.DepartmentService;
+import com.example.springemployees.model.Department;
+import com.example.springemployees.repository.DepartmentRepository;
+import com.example.springemployees.service.DepartmentService;
 
 import java.util.List;
 

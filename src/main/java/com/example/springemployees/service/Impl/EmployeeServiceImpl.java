@@ -1,12 +1,12 @@
-package ru.kors.springemployees.service.Impl;
+package com.example.springemployees.service.Impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kors.springemployees.model.Employee;
-import ru.kors.springemployees.repository.EmployeeRepository;
-import ru.kors.springemployees.service.EmployeeService;
+import com.example.springemployees.model.Employee;
+import com.example.springemployees.repository.EmployeeRepository;
+import com.example.springemployees.service.EmployeeService;
 
 import java.util.List;
 

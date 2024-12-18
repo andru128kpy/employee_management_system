@@ -1,6 +1,6 @@
-package ru.kors.springemployees.service;
+package com.example.springemployees.service;
 
-import ru.kors.springemployees.model.Employee;
+import com.example.springemployees.model.Employee;
 
 import java.util.List;
 

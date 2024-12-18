@@ -1,4 +1,4 @@
-package ru.kors.springemployees;
+package com.example.springemployees;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package ru.kors.springemployees.model;
+package com.example.springemployees.model;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package ru.kors.springemployees.model;
+package com.example.springemployees.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
