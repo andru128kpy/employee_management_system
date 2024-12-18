@@ -1,5 +1,6 @@
 package ru.kors.springemployees.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,6 +16,7 @@ public class Department {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "departments")
     private Set<Employee> employees;
 

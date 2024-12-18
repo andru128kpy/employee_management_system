@@ -25,6 +25,8 @@ public class Employee {
     @Transient
     private int age;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
             name = "employee_department",
