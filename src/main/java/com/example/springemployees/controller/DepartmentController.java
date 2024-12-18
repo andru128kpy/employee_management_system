@@ -1,10 +1,14 @@
 package com.example.springemployees.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import com.example.springemployees.model.Department;
 import com.example.springemployees.service.DepartmentService;
+
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/departments")
@@ -18,7 +22,7 @@ public class DepartmentController {
     }
 
     @PostMapping("save_department")
-    public Department saveDepartment(@RequestBody Department department) {
+    public Department saveDepartment(@Valid @RequestBody Department department) {
         return departmentService.saveDepartment(department);
     }
 

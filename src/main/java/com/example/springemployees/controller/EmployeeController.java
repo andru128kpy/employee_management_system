@@ -1,11 +1,14 @@
 package com.example.springemployees.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.example.springemployees.model.Employee;
 import com.example.springemployees.service.EmployeeService;
 
 import java.util.List;
+
 
 
 @RestController
@@ -20,8 +23,9 @@ public class EmployeeController {
         return service.findAllEmployee();
     }
 
-    @PostMapping("save_employee")
-    public String saveStudent(@RequestBody Employee employee) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @PostMapping("/save_employee")
+    public String saveStudent(@Valid @RequestBody Employee employee) {
         service.saveEmployee(employee);
         return "employee successfully saved";
     }
@@ -30,10 +34,9 @@ public class EmployeeController {
     public Employee findByEmail(@PathVariable String email) {
         return service.findByEmail(email);
     }
-    // /api/v1/students/oleg12@gmail.com
 
-    @PutMapping("update_employee")
-    public Employee updateStudent(@RequestBody Employee employee) {
+    @PutMapping("/update_employee")
+    public Employee updateStudent(@Valid @RequestBody Employee employee) {
         return service.updateEmployee(employee);
     }
 
@@ -61,5 +64,4 @@ public class EmployeeController {
     public List<Employee> findByDepartmentName(@PathVariable String departmentName) {
         return service.findByDepartmentName(departmentName);
     }
-
 }
