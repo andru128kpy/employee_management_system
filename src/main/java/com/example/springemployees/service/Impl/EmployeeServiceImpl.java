@@ -56,4 +56,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> findByManager(String manager) {
         return repository.findByManager(manager);
     }
+
+    @Override
+    public List<Employee> findByDepartmentName(String departmentName) {
+        return repository.findByDepartmentName(departmentName);
+    }
+
 }

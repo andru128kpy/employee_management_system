@@ -7,6 +7,7 @@ import com.example.springemployees.model.Employee;
 import java.util.List;
 
 
+
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     void deleteByEmail(String email);
     Employee findEmployeeByEmail(String email);
@@ -16,5 +17,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT e FROM Employee e LEFT JOIN FETCH e.departments")
     List<Employee> findAllEmployeesWithDepartments();
+
+
+    @Query("SELECT e FROM Employee e JOIN e.departments d WHERE d.name = :departmentName")
+    List<Employee> findByDepartmentName(String departmentName);
 }
 

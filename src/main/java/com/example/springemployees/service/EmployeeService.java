@@ -13,4 +13,5 @@ public interface EmployeeService {
     List<Employee> findByName(String firstName);
     List<Employee> findByStatus(String status);
     List<Employee> findByManager(String manager);
+    List<Employee> findByDepartmentName(String departmentName);
 }
