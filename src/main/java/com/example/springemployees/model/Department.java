@@ -18,7 +18,6 @@ public class Department {
     @NotBlank(message = "The department name cannot be empty")
     private String name;
 
-
     @JsonIgnore
     @ManyToMany(mappedBy = "departments")
     private Set<Employee> employees;
