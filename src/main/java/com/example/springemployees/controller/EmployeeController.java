@@ -1,8 +1,10 @@
 package com.example.springemployees.controller;
 
-import com.example.springemployees.utils.SortUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import com.example.springemployees.model.Employee;
 import com.example.springemployees.service.EmployeeService;
@@ -19,9 +21,8 @@ public class EmployeeController {
 
 
     @GetMapping
-    public List<Employee> findAllEmployee(@RequestParam(required = false) String sortBy, @RequestParam(required = false) String sortDir) {
-        Sort sort = SortUtil.buildSort(sortBy, sortDir);
-        return service.findAllEmployee(sort);
+    public Page<Employee> findAllEmployee(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) { // Изменено на Page<Employee> и добавлен Pageable
+        return service.findAllEmployee(pageable);
     }
 
     @PostMapping("/save_employee")
@@ -41,8 +42,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/search")
-    public List<Employee> searchEmployees(@RequestParam Map<String, String> params, @RequestParam(required = false) String sortBy, @RequestParam(required = false) String sortDir) {
-        Sort sort = SortUtil.buildSort(sortBy, sortDir);
-        return service.findEmployeesByCriteria(params, sort);
+    public Page<Employee> searchEmployees(@RequestParam Map<String, String> params, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) { // Изменено на Page<Employee> и добавлен Pageable
+        return service.findEmployeesByCriteria(params, pageable);
     }
 }

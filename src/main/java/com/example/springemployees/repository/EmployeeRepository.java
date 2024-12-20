@@ -2,12 +2,16 @@ package com.example.springemployees.repository;
 
 import com.example.springemployees.model.Department;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import com.example.springemployees.model.Employee;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +20,14 @@ import java.util.Map;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    @Query("SELECT e FROM Employee e LEFT JOIN FETCH e.departments WHERE e.deleted = false")
-    List<Employee> findAllEmployeesWithDepartments(Sort sort);
+    @Query("SELECT e FROM Employee e LEFT JOIN e.departments d WHERE e.deleted = false")
+    Page<Employee> findAllEmployeesWithDepartments(Pageable pageable);
 
     @Modifying
     @Query("UPDATE Employee e SET e.deleted = true WHERE e.email = :email")
     void softDeleteByEmail(String email);
 
-    default List<Employee> findEmployeesByCriteria(EntityManager em, Map<String, String> params, Sort sort) { // Добавлено Sort
+    default Page<Employee> findEmployeesByCriteria(EntityManager em, Map<String, String> params, Pageable pageable) { // Изменено на Page<Employee> и добавлен Pageable
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
         Root<Employee> employeeRoot = criteriaQuery.from(Employee.class);
@@ -50,16 +54,28 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
         });
 
         criteriaQuery.where(predicates.toArray(Predicate[]::new));
-        criteriaQuery.orderBy(sort.get().map(order -> { // Применение сортировки
+
+        // Сортировка и пагинация
+        List<Order> orders = pageable.getSort().get().map(order -> {
             if (order.isAscending()) {
                 return criteriaBuilder.asc(employeeRoot.get(order.getProperty()));
             } else {
                 return criteriaBuilder.desc(employeeRoot.get(order.getProperty()));
             }
-        }).toList());
+        }).toList();
+
+        criteriaQuery.orderBy(orders);
+
+        TypedQuery<Employee> typedQuery = em.createQuery(criteriaQuery);
+        typedQuery.setFirstResult((int) pageable.getOffset());
+        typedQuery.setMaxResults(pageable.getPageSize());
+
+        // Получение общего количества записей для пагинации
+        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
+        countQuery.select(criteriaBuilder.count(countQuery.from(Employee.class))).where(predicates.toArray(new Predicate[0]));
+        Long total = em.createQuery(countQuery).getSingleResult();
 
 
-        return em.createQuery(criteriaQuery).getResultList();
+        return new PageImpl<>(typedQuery.getResultList(), pageable, total);
     }
 }
-

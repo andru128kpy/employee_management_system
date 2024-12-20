@@ -26,9 +26,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @PersistenceContext
     private EntityManager entityManager;
 
+
     @Override
-    public List<Employee> findAllEmployee(Sort sort) {
-        return repository.findAllEmployeesWithDepartments(sort);
+    public Page<Employee> findAllEmployee(Pageable pageable) {
+        return repository.findAllEmployeesWithDepartments(pageable);
     }
 
     @Override
@@ -49,8 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findEmployeesByCriteria(Map<String, String> params, Sort sort) {
-        return repository.findEmployeesByCriteria(entityManager, params, sort);
+    public Page<Employee> findEmployeesByCriteria(Map<String, String> params, Pageable pageable) {
+        return repository.findEmployeesByCriteria(entityManager, params, pageable);
     }
 
 }

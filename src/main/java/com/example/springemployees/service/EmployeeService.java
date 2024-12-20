@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface EmployeeService {
-    List<Employee> findAllEmployee(Sort sort);
+    Page<Employee> findAllEmployee(Pageable pageable); // Изменено на Page<Employee> и добавлен Pageable
     Employee saveEmployee(Employee employee);
     Employee updateEmployee(Employee employee);
     void deleteEmployee(String email);
-    List<Employee> findEmployeesByCriteria(Map<String, String> params, Sort sort);
+    Page<Employee> findEmployeesByCriteria(Map<String, String> params, Pageable pageable);
 }
