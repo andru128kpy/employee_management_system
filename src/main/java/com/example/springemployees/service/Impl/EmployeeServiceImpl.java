@@ -5,6 +5,9 @@ import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.springemployees.model.Employee;
@@ -24,14 +27,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EntityManager entityManager;
 
     @Override
-    public List<Employee> findAllEmployee() {
-        return repository.findAllEmployeesWithDepartments();
+    public List<Employee> findAllEmployee(Sort sort) {
+        return repository.findAllEmployeesWithDepartments(sort);
     }
 
     @Override
     public Employee saveEmployee(Employee employee) {
         return repository.save(employee);
     }
+
 
     @Override
     public Employee updateEmployee(Employee employee) {
@@ -45,8 +49,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findEmployeesByCriteria(Map<String, String> params) {
-        return repository.findEmployeesByCriteria(entityManager, params);
+    public List<Employee> findEmployeesByCriteria(Map<String, String> params, Sort sort) {
+        return repository.findEmployeesByCriteria(entityManager, params, sort);
     }
 
 }
