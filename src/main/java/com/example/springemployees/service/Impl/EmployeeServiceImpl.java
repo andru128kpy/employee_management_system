@@ -1,5 +1,6 @@
 package com.example.springemployees.service.Impl;
 
+import com.example.springemployees.specification.EmployeeSpecifications;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.springemployees.model.Employee;
@@ -51,7 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Page<Employee> findEmployeesByCriteria(Map<String, String> params, Pageable pageable) {
-        return repository.findEmployeesByCriteria(entityManager, params, pageable);
+        Specification<Employee> spec = EmployeeSpecifications.combineSpecifications(params);
+        return repository.findAll(spec, pageable);
     }
 
 }

@@ -38,9 +38,6 @@ public class Employee {
     @Column(unique = true)
     private String email;
 
-    @Transient
-    private int age;
-
     @Column(nullable = false)
     @ColumnDefault("false")
     private Boolean deleted = false;
