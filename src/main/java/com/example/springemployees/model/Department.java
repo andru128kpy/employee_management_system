@@ -12,7 +12,8 @@ import java.util.Set;
 @Table(name = "departments")
 public class Department {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "department_seq")
+    @SequenceGenerator(name = "department_seq", sequenceName = "departments_SEQ", allocationSize = 1)
     private Long id;
 
     @NotBlank(message = "The department name cannot be empty")

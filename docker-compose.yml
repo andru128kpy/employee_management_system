@@ -1,0 +1,16 @@
+version: '3.8' # или более поздняя версия
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432" # Опционально, если нужен доступ извне
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: aks124alv124
+      POSTGRES_DB: test4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
