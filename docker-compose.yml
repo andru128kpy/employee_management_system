@@ -4,11 +4,11 @@ services:
   postgres:
     image: postgres:latest
     ports:
-      - "5432:5432" # Опционально, если нужен доступ извне
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: aks124alv124
-      POSTGRES_DB: test4
+      POSTGRES_DB: employees_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
