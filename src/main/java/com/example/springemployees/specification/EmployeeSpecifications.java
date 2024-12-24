@@ -10,45 +10,29 @@ import java.util.List;
 import java.util.Map;
 
 public class EmployeeSpecifications {
-    public static Specification<Employee> hasDepartmentName(String departmentName) {
+    public static Specification<Employee> filterByName(String name) {
+        return (root, query, criteriaBuilder) ->
+                name == null || name.isEmpty() ? null : criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), "%" + name.toLowerCase() + "%");
+    }
+
+    public static Specification<Employee> filterByStatus(String status) {
+        return (root, query, criteriaBuilder) ->
+                status == null || status.isEmpty() ? null : criteriaBuilder.equal(root.get("status"), status);
+    }
+
+    public static Specification<Employee> filterByDepartments(List<Long> departmentIds) {
         return (root, query, criteriaBuilder) -> {
-            if (departmentName == null || departmentName.isBlank()) {
+            if (departmentIds == null || departmentIds.isEmpty()) {
                 return null;
             }
-
-            String[] departmentNames = departmentName.split(",");
-            Join<Employee, Department> departmentJoin = root.join("departments", JoinType.LEFT);
-            return criteriaBuilder.or(
-                    List.of(departmentNames).stream()
-                            .map(String::trim)
-                            .map(name -> criteriaBuilder.equal(departmentJoin.get("name"), name))
-                            .toArray(Predicate[]::new)
-            );
+            var departmentsJoin = root.join("departments", JoinType.LEFT);
+            return departmentsJoin.get("id").in(departmentIds);
         };
     }
 
-    public static Specification<Employee> hasProperty(String propertyName, String propertyValue) {
-        return (root, query, criteriaBuilder) -> {
-            if (propertyValue == null || propertyValue.isBlank()) {
-                return null;
-            }
-            return criteriaBuilder.equal(root.get(propertyName), propertyValue);
-        };
-    }
-
-    public static Specification<Employee> isNotDeleted() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("deleted"), false);
-    }
-
-    public static Specification<Employee> combineSpecifications(Map<String, String> params) {
-        Specification<Employee> spec = isNotDeleted();
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            if ("departmentName".equals(entry.getKey())) {
-                spec = spec.and(hasDepartmentName(entry.getValue()));
-            } else {
-                spec = spec.and(hasProperty(entry.getKey(), entry.getValue()));
-            }
-        }
-        return spec;
+    public static Specification<Employee> combineFilters(String name, String status, List<Long> departmentIds) {
+        return Specification.where(filterByName(name))
+                .and(filterByStatus(status))
+                .and(filterByDepartments(departmentIds));
     }
 }

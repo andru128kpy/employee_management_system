@@ -1,5 +1,6 @@
 package com.example.springemployees.controller;
 
+import com.example.springemployees.DTO.DepartmentDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import com.example.springemployees.model.Department;
@@ -17,17 +18,17 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping
-    public List<Department> findAllDepartments() {
+    public List<DepartmentDTO> findAllDepartments() {
         return departmentService.findAllDepartments();
     }
 
     @PostMapping("save_department")
-    public Department saveDepartment(@Valid @RequestBody Department department) {
+    public DepartmentDTO saveDepartment(@Valid @RequestBody DepartmentDTO department) {
         return departmentService.saveDepartment(department);
     }
 
     @GetMapping("/{id}")
-    public Department findById(@PathVariable Long id) {
+    public DepartmentDTO findById(@PathVariable Long id) {
         return departmentService.findById(id);
     }
 }

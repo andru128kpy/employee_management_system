@@ -1,5 +1,7 @@
 package com.example.springemployees.service.Impl;
 
+import com.example.springemployees.DTO.DepartmentDTO;
+import com.example.springemployees.mapper.DepartmentMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.springemployees.model.Department;
@@ -7,24 +9,29 @@ import com.example.springemployees.repository.DepartmentRepository;
 import com.example.springemployees.service.DepartmentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
-    private final DepartmentRepository departmentRepository;
+    private final DepartmentRepository repository;
+    private final DepartmentMapper mapper;
 
     @Override
-    public List<Department> findAllDepartments() {
-        return departmentRepository.findAll();
+    public List<DepartmentDTO> findAllDepartments() {
+        return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Department saveDepartment(Department department) {
-        return departmentRepository.save(department);
+    public DepartmentDTO saveDepartment(DepartmentDTO departmentDTO) {
+        Department department = mapper.toEntity(departmentDTO);
+        department = repository.save(department);
+        return mapper.toDto(department);
     }
 
     @Override
-    public Department findById(Long id) {
-        return departmentRepository.findById(id).orElse(null);
+    public DepartmentDTO findById(Long id) {
+        Department department = repository.findById(id).orElse(null);
+        return mapper.toDto(department);
     }
 }

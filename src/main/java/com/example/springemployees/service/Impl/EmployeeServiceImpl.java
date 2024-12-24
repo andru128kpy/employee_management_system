@@ -1,5 +1,7 @@
 package com.example.springemployees.service.Impl;
 
+import com.example.springemployees.DTO.EmployeeDTO;
+import com.example.springemployees.mapper.EmployeeMapper;
 import com.example.springemployees.specification.EmployeeSpecifications;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -24,37 +26,54 @@ import java.util.Map;
 @Primary
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository repository;
+    private final EmployeeMapper mapper;
 
     @PersistenceContext
     private EntityManager entityManager;
 
 
     @Override
-    public Page<Employee> findAllEmployee(Pageable pageable) {
-        return repository.findAllEmployeesWithDepartments(pageable);
+    public Page<EmployeeDTO> findAllEmployee(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::toDto);
     }
 
     @Override
-    public Employee saveEmployee(Employee employee) {
-        return repository.save(employee);
-    }
-
-
-    @Override
-    public Employee updateEmployee(Employee employee) {
-        return repository.save(employee);
+    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = mapper.toEntity(employeeDTO);
+        employee = repository.save(employee);
+        return mapper.toDto(employee);
     }
 
     @Override
-    @Transactional
+    public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = mapper.toEntity(employeeDTO);
+        employee = repository.save(employee);
+        return mapper.toDto(employee);
+    }
+
+    @Override
     public void deleteEmployee(String email) {
         repository.softDeleteByEmail(email);
     }
 
     @Override
-    public Page<Employee> findEmployeesByCriteria(Map<String, String> params, Pageable pageable) {
-        Specification<Employee> spec = EmployeeSpecifications.combineSpecifications(params);
-        return repository.findAll(spec, pageable);
-    }
+    public Page<EmployeeDTO> findEmployeesByCriteria(Map<String, String> params, Pageable pageable) {
+        String name = params.get("name");
+        String status = params.get("status");
 
+        // Парсим список departmentIds
+        List<Long> departmentIds = null;
+        if (params.containsKey("departmentIds")) {
+            departmentIds = List.of(params.get("departmentIds").split(","))
+                    .stream()
+                    .map(Long::valueOf)
+                    .toList();
+        }
+
+        // Создаем спецификацию
+        Specification<Employee> specification = EmployeeSpecifications.combineFilters(name, status, departmentIds);
+
+        // Фильтрация, сортировка и пагинация
+        return repository.findAll(specification, pageable).map(mapper::toDto);
+    }
 }
