@@ -2,6 +2,9 @@ package com.example.springemployees.service.Impl;
 
 import com.example.springemployees.DTO.EmployeeDTO;
 import com.example.springemployees.mapper.EmployeeMapper;
+import com.example.springemployees.model.Manager;
+import com.example.springemployees.repository.DepartmentRepository;
+import com.example.springemployees.repository.ManagerRepository;
 import com.example.springemployees.specification.EmployeeSpecifications;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,6 +23,7 @@ import com.example.springemployees.service.EmployeeService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +31,8 @@ import java.util.Map;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository repository;
     private final EmployeeMapper mapper;
+    private ManagerRepository managerRepository;
+    private DepartmentRepository departmentRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -38,17 +44,53 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
+    public void saveEmployee(EmployeeDTO employeeDTO) {
         Employee employee = mapper.toEntity(employeeDTO);
-        employee = repository.save(employee);
-        return mapper.toDto(employee);
+
+        // Привязка менеджера
+        if (employeeDTO.getManager() != null && employeeDTO.getManager().getId() != null) {
+            Manager manager = managerRepository.findById(employeeDTO.getManager().getId())
+                    .orElseThrow(() -> new RuntimeException("Manager not found"));
+            employee.setManager(manager);
+        }
+
+        // Привязка департаментов
+        if (employeeDTO.getDepartments() != null) {
+            employee.setDepartments(
+                    employeeDTO.getDepartments().stream()
+                            .map(departmentDTO -> departmentRepository.findDepartmentById(departmentDTO.getId())
+                                    .orElseThrow(() -> new RuntimeException("Department not found")))
+                            .collect(Collectors.toSet())
+            );
+        }
+
+        repository.save(employee);
     }
 
-    @Override
+
+        @Override
     public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
-        Employee employee = mapper.toEntity(employeeDTO);
-        employee = repository.save(employee);
-        return mapper.toDto(employee);
+            Employee employee = mapper.toEntity(employeeDTO);
+
+            // Привязка менеджера
+            if (employeeDTO.getManager() != null && employeeDTO.getManager().getId() != null) {
+                Manager manager = managerRepository.findById(employeeDTO.getManager().getId())
+                        .orElseThrow(() -> new RuntimeException("Manager not found"));
+                employee.setManager(manager);
+            }
+
+            // Привязка департаментов
+            if (employeeDTO.getDepartments() != null) {
+                employee.setDepartments(
+                        employeeDTO.getDepartments().stream()
+                                .map(departmentDTO -> departmentRepository.findDepartmentById(departmentDTO.getId())
+                                        .orElseThrow(() -> new RuntimeException("Department not found")))
+                                .collect(Collectors.toSet())
+                );
+            }
+
+            employee = repository.save(employee);
+            return mapper.toDto(employee);
     }
 
     @Override

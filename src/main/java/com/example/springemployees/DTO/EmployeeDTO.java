@@ -10,9 +10,9 @@ public class EmployeeDTO {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String manager;
+    private ManagerDTO manager;
     private String urlPhoto;
     private String status;
     private String email;
-    private Set<Long> departmentIds;
+    private Set<DepartmentDTO> departments;
 }

@@ -28,7 +28,9 @@ public class Employee {
     @NotNull(message = "The date of birth cannot be empty")
     private LocalDate dateOfBirth;
 
-    private String manager;
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
 
     @URL(message = "The URL must be correct")
     private String urlPhoto;

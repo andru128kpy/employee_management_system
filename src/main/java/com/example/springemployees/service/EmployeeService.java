@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface EmployeeService {
     Page<EmployeeDTO> findAllEmployee(Pageable pageable);
-    EmployeeDTO saveEmployee(EmployeeDTO employeeDTO);
+    void saveEmployee(EmployeeDTO employeeDTO);
     EmployeeDTO updateEmployee(EmployeeDTO employeeDTO);
     void deleteEmployee(String email);
     Page<EmployeeDTO> findEmployeesByCriteria(Map<String, String> params, Pageable pageable);
