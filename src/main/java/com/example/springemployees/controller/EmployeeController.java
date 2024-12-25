@@ -23,8 +23,10 @@ public class EmployeeController {
 
     @GetMapping
     public Page<EmployeeDTO> findAllEmployee(
-            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) { // Изменено на Page<Employee> и добавлен Pageable
-        return service.findAllEmployee(pageable);
+            @RequestParam Map<String, String> params, // Фильтры передаются через параметры запроса
+            Pageable pageable // Для сортировки и пагинации
+    ) {
+        return service.findEmployeesByCriteria(params, pageable);
     }
 
     @PostMapping("/save_employee")
@@ -45,8 +47,9 @@ public class EmployeeController {
 
     @GetMapping("/search")
     public Page<EmployeeDTO> searchEmployees(
-            @RequestParam Map<String, String> params,
-            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+            @RequestParam Map<String, String> params, // Фильтры передаются через параметры запроса
+            Pageable pageable // Для сортировки и пагинации
+    ) {
         return service.findEmployeesByCriteria(params, pageable);
     }
 }

@@ -102,6 +102,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<EmployeeDTO> findEmployeesByCriteria(Map<String, String> params, Pageable pageable) {
         String name = params.get("name");
         String status = params.get("status");
+        String managerName = params.get("managerName");
+        String departmentName = params.get("departmentName");
 
         // Парсим список departmentIds
         List<Long> departmentIds = null;
@@ -113,7 +115,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         // Создаем спецификацию
-        Specification<Employee> specification = EmployeeSpecifications.combineFilters(name, status, departmentIds);
+        Specification<Employee> specification = EmployeeSpecifications.combineFilters(name, status, departmentIds, managerName, departmentName);
 
         // Фильтрация, сортировка и пагинация
         return repository.findAll(specification, pageable).map(mapper::toDto);
