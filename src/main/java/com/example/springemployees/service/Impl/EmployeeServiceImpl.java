@@ -20,9 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.springemployees.model.Employee;
 import com.example.springemployees.repository.EmployeeRepository;
 import com.example.springemployees.service.EmployeeService;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper mapper;
     private ManagerRepository managerRepository;
     private DepartmentRepository departmentRepository;
+    private static final String UPLOAD_DIR = "uploads/";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -119,5 +126,37 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // Фильтрация, сортировка и пагинация
         return repository.findAll(specification, pageable).map(mapper::toDto);
+    }
+
+    @Override
+    public void uploadPhoto(String email, MultipartFile file) throws IOException {
+        Employee employee = repository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Employee with email " + email + " not found"));
+
+        // Проверяем, что файл не пустой
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty!");
+        }
+
+        // Создаем директорию, если она не существует
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // Генерируем уникальное имя файла
+        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        Path filePath = uploadPath.resolve(fileName);
+
+        // Сохраняем файл
+        try {
+            file.transferTo(filePath);
+        } catch (IOException e) {
+            throw new IOException("Failed to save file " + fileName + ": " + e.getMessage());
+        }
+
+        // Обновляем путь к фотографии у сотрудника
+        employee.setPhotoPath(fileName); // Сохраняем относительный путь
+        repository.save(employee);
     }
 }

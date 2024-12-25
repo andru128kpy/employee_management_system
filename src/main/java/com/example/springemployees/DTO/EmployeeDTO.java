@@ -11,7 +11,7 @@ public class EmployeeDTO {
     private String lastName;
     private LocalDate dateOfBirth;
     private ManagerDTO manager;
-    private String urlPhoto;
+    private String photoPath;
     private String status;
     private String email;
     private Set<DepartmentDTO> departments;

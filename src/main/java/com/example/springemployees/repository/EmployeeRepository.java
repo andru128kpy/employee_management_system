@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
@@ -27,6 +28,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Modifying
     @Query("UPDATE Employee e SET e.deleted = true WHERE e.email = :email")
     void softDeleteByEmail(String email);
+
+    @Query("SELECT e FROM Employee e WHERE e.email = :email AND e.deleted = false")
+    Optional<Employee> findByEmail(String email);
 
     Page<Employee> findAll(Specification<Employee> spec, Pageable pageable);
 

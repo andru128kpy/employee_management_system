@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import com.example.springemployees.model.Employee;
 import com.example.springemployees.service.EmployeeService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -21,35 +23,35 @@ public class EmployeeController {
     private final EmployeeService service;
 
 
+    @PostMapping("/{email}/photo")
+    public String uploadPhoto(
+            @PathVariable String email, @RequestParam("photo") MultipartFile file
+    ) throws IOException {
+        service.uploadPhoto(email, file);
+        return "Photo successfully uploaded";
+    }
+
     @GetMapping
-    public Page<EmployeeDTO> findAllEmployee(
+    public Page<EmployeeDTO> findAllEmployees(
             @RequestParam Map<String, String> params, // Фильтры передаются через параметры запроса
             Pageable pageable // Для сортировки и пагинации
     ) {
         return service.findEmployeesByCriteria(params, pageable);
     }
 
-    @PostMapping("/save_employee")
-    public String saveEmployee(@Valid @RequestBody EmployeeDTO employee) {
+    @PostMapping
+    public String createEmployee(@Valid @RequestBody EmployeeDTO employee) {
         service.saveEmployee(employee);
-        return "employee successfully saved";
+        return "Employee successfully created";
     }
 
-    @PutMapping("/update_employee")
-    public EmployeeDTO updateEmployee(@Valid @RequestBody EmployeeDTO employee) {
+    @PutMapping("/{id}")
+    public EmployeeDTO updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeDTO employee) {
         return service.updateEmployee(employee);
     }
 
-    @DeleteMapping("delete_employee/{email}")
+    @DeleteMapping("/{email}")
     public void deleteEmployee(@PathVariable String email) {
         service.deleteEmployee(email);
-    }
-
-    @GetMapping("/search")
-    public Page<EmployeeDTO> searchEmployees(
-            @RequestParam Map<String, String> params, // Фильтры передаются через параметры запроса
-            Pageable pageable // Для сортировки и пагинации
-    ) {
-        return service.findEmployeesByCriteria(params, pageable);
     }
 }

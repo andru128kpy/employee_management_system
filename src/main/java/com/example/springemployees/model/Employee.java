@@ -32,8 +32,7 @@ public class Employee {
     @JoinColumn(name = "manager_id")
     private Manager manager;
 
-    @URL(message = "The URL must be correct")
-    private String urlPhoto;
+    private String photoPath;
 
     private String status;
 
