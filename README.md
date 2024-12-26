@@ -20,3 +20,5 @@ Password: admin
 * Login: user
 * Password: user
 * Roles: USER
+
+* Authorization is performed via Basic Auth. In Postman, you can use the built-in "Authorization" function or add the Authorization header with the value: *
