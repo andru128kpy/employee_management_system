@@ -6,15 +6,16 @@
 * Find the main application class (the class with the annotation `@SpringBootApplication').
 * Right-click on the main class.
 * Select The "Run" Name Of The Main Class.main()'".
-**Test credits
 
-**To use the API with authorization:
+** Test credits
+
+** To use the API with authorization:
 
 *Administrator:
 * Login: admin
 Password: admin
-**Roles: ADMIN
-*User:
-*Login: user
-*Password: user
-*Roles: USER
+* Roles: ADMIN
+* User:
+* Login: user
+* Password: user
+* Roles: USER
