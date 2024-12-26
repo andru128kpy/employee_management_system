@@ -1,134 +1,272 @@
 {
   "info": {
-    "_postman_id": "f8a9539d-7803-4927-b737-2903570021d3",
     "name": "Spring Employees API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Postman collection for testing Spring Employees API endpoints."
+    "description": "Postman-коллекция для тестирования API управления сотрудниками и департаментами, включая авторизацию и все CRUD-операции.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Get All Employees",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "localhost:8080/api/v1/employees",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "v1", "employees"]
-        },
-        "description": "Retrieves all employees."
-      },
-      "response": []
-    },
-    {
-      "name": "Get Employee by ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "localhost:8080/api/v1/employees/1",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "v1", "employees", "1"]
-        },
-        "description": "Retrieves an employee by their ID."
-      },
-      "response": []
-    },
-    {
-      "name": "Create Employee",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phoneNumber\": \"123-456-7890\",\n    \"hireDate\": \"2023-10-26\",\n    \"jobId\": 1,\n    \"salary\": 50000,\n    \"departmentId\": 1\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login as Admin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{admin_credentials}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees"]
             }
           }
         },
-        "url": {
-          "raw": "localhost:8080/api/v1/employees",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "v1", "employees"]
-        },
-        "description": "Creates a new employee."
-      },
-      "response": []
+        {
+          "name": "Login as User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{user_credentials}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments"]
+            }
+          }
+        }
+      ]
     },
     {
-      "name": "Update Employee",
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"id\": 1,\n    \"firstName\": \"Updated John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"updated.john.doe@example.com\",\n    \"phoneNumber\": \"123-456-7890\",\n    \"hireDate\": \"2023-10-26\",\n    \"jobId\": 1,\n    \"salary\": 60000,\n    \"departmentId\": 1\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "Employee Controller",
+      "item": [
+        {
+          "name": "Get List of Employees with Filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{admin_credentials}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees?name=John&email=johndoe@example.com&status=ACTIVE&department=HR",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "John"
+                },
+                {
+                  "key": "email",
+                  "value": "johndoe@example.com"
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "department",
+                  "value": "HR"
+                }
+              ]
             }
           }
         },
-        "url": {
-          "raw": "localhost:8080/api/v1/employees/1",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "v1", "employees", "1"]
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{admin_credentials}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"email\": \"johndoe@example.com\",\n  \"status\": \"ACTIVE\",\n  \"photoPath\": \"\",\n  \"manager\": {\n    \"id\": 1,\n    \"name\": \"Manager Name\",\n    \"email\": \"manager@example.com\"\n  },\n  \"departments\": [\n    { \"id\": 1, \"name\": \"HR\" },\n    { \"id\": 2, \"name\": \"Finance\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees"]
+            }
+          }
         },
-        "description": "Updates an existing employee."
-      },
-      "response": []
+        {
+          "name": "Upload Employee Photo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{admin_credentials}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees/johndoe@example.com/photo",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees", "johndoe@example.com", "photo"]
+            }
+          }
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{admin_credentials}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe Updated\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"email\": \"johndoe@example.com\",\n  \"status\": \"INACTIVE\",\n  \"photoPath\": \"\",\n  \"manager\": {\n    \"id\": 1,\n    \"name\": \"Manager Name\",\n    \"email\": \"manager@example.com\"\n  },\n  \"departments\": [\n    { \"id\": 1, \"name\": \"HR\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{admin_credentials}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/employees/johndoe@example.com",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "employees", "johndoe@example.com"]
+            }
+          }
+        }
+      ]
     },
     {
-      "name": "Delete Employee",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "localhost:8080/api/v1/employees/1",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "v1", "employees", "1"]
+      "name": "Department Controller",
+      "item": [
+        {
+          "name": "Get All Departments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{user_credentials}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments"]
+            }
+          }
         },
-        "description": "Deletes an employee by their ID."
-      },
-      "response": []
-    },
-    {
-      "name": "Get All Departments",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "localhost:8080/api/v1/departments",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "v1", "departments"]
+        {
+          "name": "Get Department by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{user_credentials}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "1"]
+            }
+          }
         },
-        "description": "Retrieves all departments."
-      },
-      "response": []
-    },
-    {
-      "name": "Get Department by ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "localhost:8080/api/v1/departments/1",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "v1", "departments", "1"]
-        },
-        "description": "Retrieves a department by its ID."
-      },
-      "response": []
+        {
+          "name": "Save Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{admin_credentials}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Engineering\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments/save_department",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "save_department"]
+            }
+          }
+        }
+      ]
     }
   ],
-  "variable": []
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "admin_credentials",
+      "value": "YWRtaW46YWRtaW4=",
+      "type": "string"
+    },
+    {
+      "key": "user_credentials",
+      "value": "dXNlcjp1c2Vy",
+      "type": "string"
+    }
+  ]
 }
