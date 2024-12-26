@@ -1,7 +1,24 @@
-**1. Через IntelliJ IDEA:**
+** IntelliJ IDEA:**
 
-* Откройте проект в IntelliJ IDEA.
-* Убедитесь, что у вас установлен плагин Spring Boot.
-* Найдите главный класс приложения (класс с аннотацией `@SpringBootApplication`).
-* Щелкните правой кнопкой мыши на главном классе.
-* Выберите "Run 'ИмяГлавногоКласса.main()'".
+
+* Open the project in IntelliJ IDEA.
+* Make sure that you have the Spring Boot plugin installed.
+* Find the main application class (the class with the annotation `@SpringBootApplication').
+* Right-click on the main class.
+* Select The "Run" Name Of The Main Class.main()'".
+
+** Test credits **
+
+** To use the API with authorization: **
+
+*Administrator:
+* Login: admin
+Password: admin
+* Roles: ADMIN
+  
+* User:
+* Login: user
+* Password: user
+* Roles: USER
+
+* Authorization is performed via Basic Auth. In Postman, you can use the built-in "Authorization" function or add the Authorization header with the value: *
