@@ -1,6 +1,7 @@
 package com.example.springemployees.controller;
 
 import com.example.springemployees.DTO.EmployeeDTO;
+import com.example.springemployees.components.EmployeeValidationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "Employee Controller", description = "Employee management")
 public class EmployeeController {
     private final EmployeeService service;
+    private final EmployeeValidationService validationService;
 
     @Operation(summary = "Upload employee photo", description = "Uploads a photo for an employee via email")
     @PostMapping("/{email}/photo")
@@ -39,6 +41,7 @@ public class EmployeeController {
             @RequestParam Map<String, String> params,
             Pageable pageable
     ) {
+        validationService.validateSearchParams(params);
         return service.findEmployeesByCriteria(params, pageable);
     }
 
