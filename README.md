@@ -7,14 +7,15 @@
 * Right-click on the main class.
 * Select The "Run" Name Of The Main Class.main()'".
 
-** Test credits
+** Test credits **
 
-** To use the API with authorization:
+** To use the API with authorization: **
 
 *Administrator:
 * Login: admin
 Password: admin
 * Roles: ADMIN
+  
 * User:
 * Login: user
 * Password: user
