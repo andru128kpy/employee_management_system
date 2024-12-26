@@ -11,10 +11,10 @@
 **To use the API with authorization:
 
 *Administrator:
-** Login: admin
-**Password: admin
+* Login: admin
+Password: admin
 **Roles: ADMIN
-**User:
-**Login: user
-**Password: user
-**Roles: USER
+*User:
+*Login: user
+*Password: user
+*Roles: USER
