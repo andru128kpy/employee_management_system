@@ -86,7 +86,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setManager(manager);
             }
 
-            // Привязка департаментов
             if (employeeDTO.getDepartments() != null) {
                 employee.setDepartments(
                         employeeDTO.getDepartments().stream()
@@ -133,30 +132,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Employee with email " + email + " not found"));
 
-        // Проверяем, что файл не пустой
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty!");
         }
 
-        // Создаем директорию, если она не существует
         Path uploadPath = Paths.get(UPLOAD_DIR);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        // Генерируем уникальное имя файла
+
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         Path filePath = uploadPath.resolve(fileName);
 
-        // Сохраняем файл
         try {
             file.transferTo(filePath);
         } catch (IOException e) {
             throw new IOException("Failed to save file " + fileName + ": " + e.getMessage());
         }
 
-        // Обновляем путь к фотографии у сотрудника
-        employee.setPhotoPath(fileName); // Сохраняем относительный путь
+
+        employee.setPhotoPath(fileName);
         repository.save(employee);
     }
 }
